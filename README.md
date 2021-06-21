@@ -1,5 +1,5 @@
 # Accord 
-#![Logo](https://user-images.githubusercontent.com/42824659/122776825-13f4c580-d2c9-11eb-87f4-f0918cd6fb06.png)
+![Logo](https://user-images.githubusercontent.com/42824659/122776825-13f4c580-d2c9-11eb-87f4-f0918cd6fb06.png)
 
 
 Desktop Personal Voice Assistant
