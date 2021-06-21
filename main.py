@@ -6,7 +6,7 @@ import webbrowser
 import os
 import smtplib
 import pyaudio
-
+from googleCal import authenticate_google, get_events
 print("Initializing Accord ....")
 
 MASTER = "Kanu Priya"
@@ -50,7 +50,7 @@ def takeCommand():
     
     except Exception as e:
         print("Say that again please")
-        query = None
+        return "None"
     return query
 
 # This function will take command and write the email
@@ -63,57 +63,71 @@ def sendEmail(to, content):
     server.close()
 
 # Main Program starts here...
-speak("Initializing Accord ....")
-wishMe()
-query = takeCommand()
 
-# Logic for executing tasks as per the query
+if __name__=="__main__":
+    speak("Initializing Accord ....")
+    wishMe()
+    flag = True
+    while flag:
+        
+        query = takeCommand().lower()
 
-if 'wikipedia' in query.lower():
-    speak("Searching wikipedia....")
-    query = query.replace("wikipedia","")
-    results = wikipedia.summary(query, sentences=2)
-    print(results)
-    speak(results) 
+        # Logic for executing tasks as per the query
 
-elif 'open youtube' in query.lower():
-    # webbrowser.open("youtube.com ")
-    url = "youtube.com"
-    chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
-    webbrowser.get(chrome_path).open(url)
+        if 'wikipedia' in query:
+            speak("Searching wikipedia....")
+            query = query.replace("wikipedia","")
+            results = wikipedia.summary(query, sentences=2)
+            print(results)
+            speak(results) 
 
-elif 'open google' in query.lower():
-    # webbrowser.open("youtube.com ")
-    url = "google.com"
-    chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
-    webbrowser.get(chrome_path).open(url)
+        elif 'open youtube' in query:
+            # webbrowser.open("youtube.com ")
+            url = "youtube.com"
+            chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
+            webbrowser.get(chrome_path).open(url)
 
-elif 'open reddit' in query.lower():
-    url = "reddit.com"
-    chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
-    webbrowser.get(chrome_path).open(url) 
+        elif 'open google' in query:
+            # webbrowser.open("youtube.com ")
+            url = "google.com"
+            chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
+            webbrowser.get(chrome_path).open(url)
 
-elif 'play music' in query.lower():
-    songs_dir = "C:\\Users\\dell\\Music"
-    songs = os.listdir(songs_dir)
-    print(songs)
-    os.startfile(os.path.join(songs_dir, songs[0]))
+        elif 'open reddit' in query:
+            url = "reddit.com"
+            chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
+            webbrowser.get(chrome_path).open(url) 
 
-elif 'the time' in query.lower():
-    strTime = datetime.datetime.now().strftime("%H:%M:%S")
-    speak(f"{MASTER} the time is {strTime}")
+        elif 'play music' in query:
+            songs_dir = "C:\\Users\\dell\\Music"
+            songs = os.listdir(songs_dir)
+            print(songs)
+            os.startfile(os.path.join(songs_dir, songs[0]))
 
-elif 'open code' in query.lower():
-    codePath = "C:\\Users\\dell\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
-    os.startfile(codePath) 
+        elif 'the time' in query:
+            strTime = datetime.datetime.now().strftime("%H:%M:%S")
+            speak(f"{MASTER} the time is {strTime}")
 
-elif 'email to kp' in query.lower():
-    try:
-        speak("What should I send")
-        content = takeCommand()
-        to = "priyakanu1116@gmail.com"
-        sendEmail(to, content)
-        speak("Email send to kanu successfully")
+        elif 'open code' in query:
+            codePath = "C:\\Users\\dell\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+            os.startfile(codePath) 
 
-    except Exception as e:
-        print(e)
+        elif 'email to kp' in query:
+            try:
+                speak("What should I send")
+                content = takeCommand()
+                to = "priyakanu1116@gmail.com"
+                sendEmail(to, content)
+                speak("Email send to kanu successfully")
+
+            except Exception as e:
+                print(e)
+        
+        elif 'calendar event' in query:
+            service = authenticate_google()
+            get_events(2, service)
+            
+
+
+        elif 'stop' in query:
+            flag = False
